@@ -49,3 +49,24 @@ LOWER(CITY) NOT LIKE '%e' AND
 LOWER(CITY) NOT LIKE '%i' AND
 LOWER(CITY) NOT LIKE '%o' AND
 LOWER(CITY) NOT LIKE '%u')
+--11
+SELECT DISTINCT CITY FROM STATION
+WHERE
+Lower(Left(City,1)) NOT IN ('a', 'e', 'i', 'o', 'u')
+OR
+Lower(RIGHT(City,1)) NOT IN ('a', 'e', 'i', 'o', 'u');
+--12
+SELECT DISTINCT CITY FROM STATION
+WHERE
+Lower(Left(City,1)) NOT IN ('a', 'e', 'i', 'o', 'u')
+AND
+Lower(RIGHT(City,1)) NOT IN ('a', 'e', 'i', 'o', 'u');
+--20
+SELECT ROUND(AVG(Lat_n),4)
+from(
+    SELECT Lat_n,
+    Row_NUMBER() OVER(ORDER BY Lat_n) as rn,
+    count(*) OVER() as total
+    from Station) as sub
+WHERE rn IN (FLOOR((total + 1) / 2), CEIL((total + 1) / 2));
+
